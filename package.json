@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "predev": "rm -fr .next",
+    "predev": "rm -rf .next",
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
