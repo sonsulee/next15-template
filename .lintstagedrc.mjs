@@ -6,7 +6,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const tsCheckCommand = () => `tsc --noEmit`
 
 const buildEslintCommand = (filenames) =>
-    `next lint --fix --file ${filenames
+  `next lint --fix --file ${filenames
     .map((f) => path.relative(__dirname, f))
     .join(' --file ')}`
 
