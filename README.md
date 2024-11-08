@@ -1,36 +1,112 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Nextjs15 + eslint9: Boilerplate
 
-## Getting Started
+A modern boilerplate showcasing ESLint 9 integration with Next.js 15, featuring Prettier, Husky, lint-staged, and Docker support.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+### ESLint Configuration
+- Uses ESLint's new flat config system
+- Integrates with Next.js recommended rules
+- TypeScript support
+- Integration with Prettier
+
+### Prettier Configuration
+Code formatting is handled automatically through Prettier integration.
+
+### Git Hooks (Husky)
+- Pre-commit: Runs lint-staged
+- Commit-msg: Validates commit messages
+
+## Commit Convention
+
+This project follows [Conventional Commits](https://www.conventionalcommits.org/) specification.
+
+### Format
+```
+<type>: <description>
+
+[optional body]
+
+[optional footer(s)]
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Types
+- `feat`: New feature
+- `fix`: Bug fix
+- `docs`: Documentation changes
+- `style`: Code style changes (formatting, etc.)
+- `refactor`: Code refactoring
+- `test`: Adding/modifying tests
+- `chore`: Build process or auxiliary tool changes
+- `perf`: Performance improvements
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Rules
+- Use lowercase for commit message
+- No period at the end
+- Keep the subject line concise
+- Use imperative mood ("add" instead of "added")
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Examples
+```bash
+chore: add eslint configuration
+feat: implement user authentication
+fix: resolve login page redirect issue
+```
 
-## Learn More
+## Using Docker
 
-To learn more about Next.js, take a look at the following resources:
+1. install Docker on your machine.
+2. Build your container: `docker build -t [image-name] .`
+3. Run your container: `docker run -p 3000:3000 [image-name]`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### In existing projects
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+To add support for Docker to an existing project, just copy the Dockerfile into the root of the project and add the following to the next.config.js file:
 
-## Deploy on Vercel
+```javascript
+// next.config.js
+module.exports = {
+    // ... rest of the configuration.
+    output: "standalone",
+};
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+This will build the project as a standalone app inside the Docker image.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Running Locally
+
+This project uses pnpm as the default package manager. However, you can use npm or yarn if preferred.
+
+### install package
+```bash
+# Using pnpm (recommended)
+pnpm install
+
+# Using npm
+npm install
+
+# Using yarn
+yarn install
+```
+
+### run development server
+
+```bash
+# Using pnpm (recommended)
+pnpm dev
+
+# Using npm
+npm run dev
+
+# Using yarn
+yarn dev
+```
+
+Open http://localhost:3000 with your browser to see the result.
+
+## Reference
+
+- https://www.conventionalcommits.org/en/v1.0.0/
+- https://github.com/underground0930/nextjs-eslint-2024
+- https://eslint.org/docs/latest/use/configure/configuration-files#using-predefined-configurations
+- https://nextjs.org/docs/app/building-your-application/configuring/eslint
