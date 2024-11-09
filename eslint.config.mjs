@@ -2,6 +2,8 @@ import nextPlugin from '@next/eslint-plugin-next'
 import js from '@eslint/js'
 import tseslint from 'typescript-eslint'
 import eslintConfigPrettier from 'eslint-config-prettier'
+import reactPlugin from 'eslint-plugin-react'
+import hooksPlugin from 'eslint-plugin-react-hooks'
 
 const config = [
   {
@@ -43,15 +45,37 @@ const config = [
     name: 'eslint/recommended',
     rules: js.configs.recommended.rules,
   },
-  ...tseslint.configs.recommended,
   {
-    files: ['**/*.ts', '**/*.tsx'],
-    languageOptions: {
-      parser: tseslint.parser,
-      parserOptions: {
-        project: './tsconfig.json',
+    name: 'react/jsx-runtime',
+    plugins: {
+      react: reactPlugin,
+    },
+    rules: reactPlugin.configs['jsx-runtime'].rules,
+    settings: {
+      react: {
+        version: 'detect',
       },
     },
+  },
+  ...tseslint.configs.recommended,
+  {
+    name: 'react/jsx-runtime',
+    plugins: {
+      react: reactPlugin,
+    },
+    rules: reactPlugin.configs['jsx-runtime'].rules,
+    settings: {
+      react: {
+        version: 'detect',
+      },
+    },
+  },
+  {
+    name: 'react-hooks/recommended',
+    plugins: {
+      'react-hooks': hooksPlugin,
+    },
+    rules: hooksPlugin.configs.recommended.rules,
   },
   {
     name: 'next/core-web-vitals',
