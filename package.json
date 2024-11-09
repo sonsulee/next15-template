@@ -9,7 +9,7 @@
     "start": "next start",
     "lint": "eslint \"**/*.{js,jsx,ts,tsx}\"",
     "format": "prettier --write .",
-    "inspect": "npx eslint --inspect-config",
+    "inspect": "eslint --inspect-config",
     "prepare": "husky"
   },
   "lint-staged": {
