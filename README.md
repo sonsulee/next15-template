@@ -1,36 +1,97 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Next.js 15 Template
 
-## Getting Started
+Welcome to the Next.js 15 Template documentation. Please choose your preferred language:
 
-First, run the development server:
+- [English](README.en.md) 🌏
+- [日本語](README.ja.md) 🗾
+- [한국어](README.ko.md) 🇰🇷
 
+---
+
+This repository contains a modern Next.js 15 template project. The project has been completely revamped with the latest updates and best practices.
+
+For detailed information, please refer to the README in your preferred language.
+
+## 🌏 English
+
+This is a modern Next.js 15 template project with the latest features and best practices. The project has been completely revamped and rebuilt from scratch to incorporate the newest updates and improvements in the Next.js ecosystem.
+
+### Features
+- Next.js 15.1.6 with App Router
+- React 19
+- TypeScript 5.7.3
+- TailwindCSS 3.4
+- Turbopack for development
+- ESLint & Prettier configuration
+- pnpm package manager
+
+### Getting Started
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+# Install dependencies
+pnpm install
+
+# Run development server
 pnpm dev
-# or
-bun dev
+
+# Build for production
+pnpm build
+
+# Start production server
+pnpm start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🗾 日本語
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+これは最新の機能とベストプラクティスを備えたモダンなNext.js 15テンプレートプロジェクトです。Next.jsエコシステムの最新のアップデートと改善を取り入れるため、プロジェクトを完全に刷新し、一から再構築しました。
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 特徴
+- Next.js 15.1.6（App Router対応）
+- React 19
+- TypeScript 5.7.3
+- TailwindCSS 3.4
+- 開発環境用Turbopack
+- ESLint & Prettier設定
+- pnpmパッケージマネージャー
 
-## Learn More
+### 始め方
+```bash
+# 依存関係のインストール
+pnpm install
 
-To learn more about Next.js, take a look at the following resources:
+# 開発サーバーの起動
+pnpm dev
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# プロダクションビルド
+pnpm build
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# プロダクションサーバーの起動
+pnpm start
+```
 
-## Deploy on Vercel
+## 🇰🇷 한국어
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+이 프로젝트는 최신 기능과 모범 사례를 포함한 모던한 Next.js 15 템플릿입니다. Next.js 생태계의 최신 업데이트와 개선사항을 반영하기 위해 프로젝트를 완전히 새롭게 재구성하였습니다.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 특징
+- Next.js 15.1.6 (App Router 지원)
+- React 19
+- TypeScript 5.7.3
+- TailwindCSS 3.4
+- Turbopack 개발 서버
+- ESLint & Prettier 설정
+- pnpm 패키지 매니저
+
+### 시작하기
+```bash
+# 의존성 설치
+pnpm install
+
+# 개발 서버 실행
+pnpm dev
+
+# 프로덕션 빌드
+pnpm build
+
+# 프로덕션 서버 실행
+pnpm start
+```
