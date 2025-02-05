@@ -1,4 +1,4 @@
-export default {
+const config = {
   semi: true,
   singleQuote: true,
   tabWidth: 2,
@@ -8,3 +8,5 @@ export default {
   endOfLine: 'lf',
   plugins: ['prettier-plugin-tailwindcss'],
 };
+
+export default config;
