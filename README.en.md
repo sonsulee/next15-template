@@ -24,6 +24,7 @@ next15-template/
 ```
 
 ## Features
+
 - **Framework**: Next.js with App Router
 - **Language**: TypeScript for type safety
 - **Styling**: TailwindCSS utility-first framework
@@ -34,6 +35,7 @@ next15-template/
 - **Package Management**: pnpm
 
 ## Getting Started
+
 ```bash
 # Install dependencies
 pnpm install
@@ -49,6 +51,7 @@ pnpm start
 ```
 
 ## Scripts
+
 - `pnpm dev`: Start development server
 - `pnpm build`: Build for production
 - `pnpm start`: Start production server

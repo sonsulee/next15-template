@@ -17,6 +17,7 @@ For detailed information, please refer to the README in your preferred language.
 This is a modern Next.js 15 template project with the latest features and best practices. The project has been completely revamped and rebuilt from scratch to incorporate the newest updates and improvements in the Next.js ecosystem.
 
 ### Features
+
 - Next.js 15.1.6 with App Router
 - React 19
 - TypeScript 5.7.3
@@ -26,6 +27,7 @@ This is a modern Next.js 15 template project with the latest features and best p
 - pnpm package manager
 
 ### Getting Started
+
 ```bash
 # Install dependencies
 pnpm install
@@ -45,6 +47,7 @@ pnpm start
 これは最新の機能とベストプラクティスを備えたモダンなNext.js 15テンプレートプロジェクトです。Next.jsエコシステムの最新のアップデートと改善を取り入れるため、プロジェクトを完全に刷新し、一から再構築しました。
 
 ### 特徴
+
 - Next.js 15.1.6（App Router対応）
 - React 19
 - TypeScript 5.7.3
@@ -54,6 +57,7 @@ pnpm start
 - pnpmパッケージマネージャー
 
 ### 始め方
+
 ```bash
 # 依存関係のインストール
 pnpm install
@@ -73,6 +77,7 @@ pnpm start
 이 프로젝트는 최신 기능과 모범 사례를 포함한 모던한 Next.js 15 템플릿입니다. Next.js 생태계의 최신 업데이트와 개선사항을 반영하기 위해 프로젝트를 완전히 새롭게 재구성하였습니다.
 
 ### 특징
+
 - Next.js 15.1.6 (App Router 지원)
 - React 19
 - TypeScript 5.7.3
@@ -82,6 +87,7 @@ pnpm start
 - pnpm 패키지 매니저
 
 ### 시작하기
+
 ```bash
 # 의존성 설치
 pnpm install

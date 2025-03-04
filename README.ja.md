@@ -24,6 +24,7 @@ next15-template/
 ```
 
 ## 特徴
+
 - **フレームワーク**: App Router対応のNext.js
 - **言語**: 型安全性のためのTypeScript
 - **スタイリング**: ユーティリティファーストのTailwindCSS
@@ -34,6 +35,7 @@ next15-template/
 - **パッケージ管理**: pnpm
 
 ## 始め方
+
 ```bash
 # 依存関係のインストール
 pnpm install
@@ -49,6 +51,7 @@ pnpm start
 ```
 
 ## スクリプト
+
 - `pnpm dev`: 開発サーバーの起動
 - `pnpm build`: プロダクションビルド
 - `pnpm start`: プロダクションサーバーの起動
