@@ -12,6 +12,7 @@ export default function Home() {
           height={38}
           priority
         />
+
         <ol className="list-inside list-decimal text-center font-[family-name:var(--font-geist-mono)] text-sm sm:text-left">
           <li className="mb-2">
             Get started by editing{' '}
