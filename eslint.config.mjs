@@ -1,5 +1,6 @@
 import { FlatCompat } from '@eslint/eslintrc';
 import eslintPluginPrettier from 'eslint-plugin-prettier';
+import globals from 'globals';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -23,9 +24,9 @@ const eslintConfig = [
         project: './tsconfig.json',
       },
       globals: {
-        browser: true,
-        es2022: true,
-        node: true,
+        ...globals.browser,
+        ...globals.es2022,
+        ...globals.node,
       },
     },
   },
