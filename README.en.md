@@ -214,6 +214,7 @@ For the auto-formatting to work correctly, you need these VSCode extensions:
 
 1. **ESLint** (by Microsoft): `dbaeumer.vscode-eslint`
 2. **Prettier - Code formatter** (by Prettier): `esbenp.prettier-vscode`
+3. **Prettier ESLint**(Rebecca Shen): `rvest.vs-code-prettier-eslint`
 
 #### Using Cursor
 

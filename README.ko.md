@@ -214,6 +214,7 @@ Prettier 설정은 다음과 같은 스타일링을 적용합니다:
 
 1. **ESLint**(Microsoft): `dbaeumer.vscode-eslint`
 2. **Prettier - Code formatter**(Prettier): `esbenp.prettier-vscode`
+3. **Prettier ESLint**(Rebecca Shen): `rvest.vs-code-prettier-eslint`
 
 #### Cursor 사용하기
 
