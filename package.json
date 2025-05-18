@@ -21,13 +21,13 @@
   "devDependencies": {
     "@eslint/compat": "^1.2.9",
     "@eslint/eslintrc": "^3.3.1",
-    "@eslint/js": "^9.26.0",
+    "@eslint/js": "^9.27.0",
     "@next/eslint-plugin-next": "^15.3.2",
-    "@tailwindcss/postcss": "^4.1.6",
-    "@types/node": "^20.17.46",
+    "@tailwindcss/postcss": "^4.1.7",
+    "@types/node": "^20.17.47",
     "@types/react": "19.0.12",
     "@types/react-dom": "19.0.4",
-    "eslint": "^9.26.0",
+    "eslint": "^9.27.0",
     "eslint-config-next": "15.3.2",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-import": "^2.31.0",
@@ -37,11 +37,11 @@
     "postcss": "^8.5.3",
     "prettier": "^3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
-    "tailwindcss": "^4.1.6",
+    "tailwindcss": "^4.1.7",
     "typescript": "^5.8.3",
-    "typescript-eslint": "^8.32.0"
+    "typescript-eslint": "^8.32.1"
   },
-  "packageManager": "pnpm@10.10.0",
+  "packageManager": "pnpm@10.11.0",
   "pnpm": {
     "onlyBuiltDependencies": [
       "sharp"
