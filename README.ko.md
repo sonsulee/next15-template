@@ -10,15 +10,13 @@ next15-template/
 │   └── app/                 # App Router 디렉토리
 │       ├── layout.tsx       # 루트 레이아웃
 │       ├── page.tsx         # 홈페이지
-│       ├── globals.css      # 전역 스타일
+│       ├── globals.css.ts   # 전역 스타일 (Vanilla Extract)
 │       └── favicon.ico      # 파비콘
 ├── public/                  # 정적 파일
 ├── .vscode/
 │   └── settings.json       # VSCode 설정
 └── 설정 파일
-    ├── next.config.ts      # Next.js 설정
-    ├── tailwind.config.ts  # Tailwind CSS 설정
-    ├── postcss.config.mjs  # PostCSS 설정
+    ├── next.config.js      # Next.js 설정 (Vanilla Extract 플러그인 포함)
     ├── eslint.config.mjs   # ESLint 설정
     └── prettier.config.mjs # Prettier 설정
 ```
@@ -27,12 +25,12 @@ next15-template/
 
 - **프레임워크**: App Router를 지원하는 Next.js
 - **언어**: 타입 안정성을 위한 TypeScript
-- **스타일링**: 유틸리티 중심의 TailwindCSS
+- **스타일링**: 제로 런타임 CSS-in-JS를 위한 Vanilla Extract
 - **개발 환경**:
-  - 빠른 개발을 위한 Turbopack
   - 코드 품질을 위한 ESLint v9 플랫 설정과 Prettier
   - import 순서 강제 및 절대 경로 import
   - VSCode 설정 포함
+  - **참고**: Vanilla Extract와의 호환성 문제로 인해 Turbopack이 비활성화되어 있습니다
 - **패키지 관리**: pnpm
 
 ## 시작하기
@@ -63,6 +61,63 @@ pnpm start
 - `pnpm check`: 포맷 검사 및 린트 실행
 - `pnpm fix`: 포맷 및 린트 수정 실행
 
+## Vanilla Extract를 이용한 스타일링
+
+이 템플릿은 [Vanilla Extract](https://vanilla-extract.style/)를 사용하여 스타일링을 구현하며, 완전한 TypeScript 지원을 제공하는 제로 런타임 CSS-in-JS를 제공합니다.
+
+### Vanilla Extract를 선택하는 이유
+
+- **제로 런타임**: 모든 스타일이 빌드 시점에 추출되어 런타임 오버헤드가 없음
+- **타입 안정성**: CSS 속성에 대한 자동 완성 기능을 갖춘 완전한 TypeScript 지원
+- **CSS 변수**: CSS 커스텀 속성과 테마 기능에 대한 내장 지원
+- **프레임워크 독립적**: 모든 프레임워크 또는 라이브러리와 호환
+- **친숙한 문법**: camelCase로 된 표준 CSS 속성명 사용
+
+### 기본 사용법
+
+`.css.ts` 파일에서 스타일 생성:
+
+```typescript
+// styles.css.ts
+import { style } from '@vanilla-extract/css';
+
+export const container = style({
+  padding: '1rem',
+  backgroundColor: '#f0f0f0',
+  borderRadius: '8px',
+});
+```
+
+컴포넌트에서 사용:
+
+```typescript
+// component.tsx
+import { container } from './styles.css.ts';
+
+export function MyComponent() {
+  return <div className={container}>내용</div>;
+}
+```
+
+### 글로벌 스타일
+
+글로벌 스타일은 `src/app/globals.css.ts`에서 정의:
+
+```typescript
+import { globalStyle } from '@vanilla-extract/css';
+
+globalStyle('body', {
+  margin: 0,
+  fontFamily: 'Arial, sans-serif',
+});
+```
+
+### 중요한 주의사항
+
+- **Turbopack 호환성**: Vanilla Extract는 현재 Next.js 15의 Turbopack과 호환성 문제가 있습니다. 이 템플릿은 올바른 동작을 보장하기 위해 개발 시 Turbopack을 비활성화합니다.
+- **파일 명명**: 스타일 파일은 Vanilla Extract에서 처리되기 위해 `.css.ts`로 끝나야 합니다.
+- **빌드 시점 처리**: 스타일은 빌드 시점에 생성되어 최적의 런타임 성능을 보장합니다.
+
 ## 코드 품질
 
 이 템플릿은 코드 품질을 위해 ESLint v9 플랫 설정과 Prettier를 사용합니다.
@@ -72,32 +127,27 @@ pnpm start
 #### 주요 기능
 
 1. **TypeScript 규칙**
-
    - `any` 타입 사용 방지(`@typescript-eslint/no-explicit-any`)
    - 타입 전용 import에는 `import type` 사용 강제(`@typescript-eslint/consistent-type-imports`)
    - 미사용 변수에 대한 경고, `_` 접두사 예외 처리(`@typescript-eslint/no-unused-vars`)
 
 2. **React 규칙**
-
    - 배열 내 모든 컴포넌트에 키 요구(`react/jsx-key`)
    - React Hooks 규칙 강제(`react-hooks/rules-of-hooks`)
    - 훅 내 누락된 종속성에 대한 경고(`react-hooks/exhaustive-deps`)
 
 3. **Import 정렬**
-
    - 그룹별로 import를 정렬하고 알파벳 순으로 정렬(`import/order`)
    - 그룹 순서: builtin → external → internal → parent → sibling → index → type
    - import 그룹 간 빈 줄 요구
 
 4. **일반 규칙**
-
    - 네이티브 `no-unused-vars` 비활성화(TypeScript가 처리)
    - 재할당되지 않는 변수에 `const` 강제(`prefer-const`)
    - `warn`과 `error` 제외한 console 사용에 대한 경고(`no-console`)
    - TypeScript enum 사용 방지, const assertions 또는 union 타입 사용 권장(`no-restricted-syntax`)
 
 5. **Prettier 통합**
-
    - ESLint와 Prettier 간의 충돌 방지
    - 코드 포매팅에 Prettier 설정 사용
 
@@ -106,16 +156,13 @@ pnpm start
 ESLint 설정은 새로운 플랫 설정 형식을 사용하며 다음을 포함합니다:
 
 1. **ignoresConfig**: ESLint 검사에서 제외할 파일 패턴 정의
-
    - 제외 대상: `dist`, `node_modules`, `build`, `.next`, `coverage`, `*.min.js`, `*.d.ts`, `.history`, `**/.git/**`
 
 2. **기본 설정**:
-
    - ESLint 권장 규칙(`js.configs.recommended`)
    - Next.js 내장 규칙(`next/core-web-vitals`, `next/typescript`)
 
 3. **customRulesConfig**: 모든 프로젝트 특정 규칙을 포함:
-
    - TypeScript 규칙
    - React 및 React Hooks 규칙
    - Import 정렬 규칙
@@ -222,7 +269,7 @@ Prettier 설정은 다음과 같은 스타일링을 적용합니다:
 - 최대 라인 길이 100자로 설정(`printWidth: 100`)
 - 화살표 함수에서 항상 괄호 사용(`arrowParens: 'always'`)
 - LF 줄 바꿈 사용(`endOfLine: 'lf'`)
-- Tailwind CSS 플러그인 사용(`plugins: ['prettier-plugin-tailwindcss']`)
+- 필요에 따라 추가 포맷팅 플러그인 지원
 
 ### IDE 통합
 
@@ -268,23 +315,19 @@ Cursor는 VSCode와 유사한 설정을 가지고 있습니다. 자동 포맷팅
 #### 일반적인 문제
 
 1. **플러그인 충돌**
-
    - "Cannot redefine plugin X" 오류가 표시되면 플러그인이 여러 번 임포트되고 있는 것입니다
    - 해결책: 중복된 플러그인 임포트를 제거하거나 호환성 레이어 사용
 
 2. **import 순서 오류**
-
    - import 순서 관련 많은 오류가 표시되는 경우
    - 해결책: `pnpm run lint`를 실행하여 모든 오류 확인 후 `pnpm run fix`를 실행하여 자동 수정
 
 3. **자동 포맷팅이 작동하지 않음**
-
    - 필요한 확장 프로그램이 설치되어 있는지 확인
    - 워크스페이스 설정이 프로젝트 설정을 덮어쓰지 않는지 확인
    - "Developer: Reload Window"를 실행하고 "Output" 패널(ESLint) 확인
 
 4. **경로 별칭 설정**
-
    - 절대 경로 import가 올바르게 작동하려면 `tsconfig.json`에 적절한 경로 별칭이 있는지 확인:
 
    ```json

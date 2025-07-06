@@ -18,13 +18,14 @@ This is a modern Next.js 15 template project with the latest features and best p
 
 ### Features
 
-- Next.js 15.1.6 with App Router
+- Next.js 15.3.5 with App Router
 - React 19
-- TypeScript 5.7.3
-- TailwindCSS 3.4
-- Turbopack for development
+- TypeScript 5.8.3
+- Vanilla Extract for zero-runtime CSS-in-JS
 - ESLint & Prettier configuration
 - pnpm package manager
+
+> **Note**: Turbopack is currently disabled due to compatibility issues with Vanilla Extract. Development uses standard Webpack compilation.
 
 ### Getting Started
 
@@ -51,10 +52,11 @@ pnpm start
 - Next.js 15.1.6（App Router対応）
 - React 19
 - TypeScript 5.7.3
-- TailwindCSS 3.4
-- 開発環境用Turbopack
+- ゼロランタイムCSS-in-JSのためのVanilla Extract
 - ESLint & Prettier設定
 - pnpmパッケージマネージャー
+
+> **注意**: Vanilla Extractとの互換性問題により、Turbopackは現在無効になっています。開発では標準のWebpackコンパイルを使用します。
 
 ### 始め方
 
@@ -81,10 +83,11 @@ pnpm start
 - Next.js 15.1.6 (App Router 지원)
 - React 19
 - TypeScript 5.7.3
-- TailwindCSS 3.4
-- Turbopack 개발 서버
+- 제로 런타임 CSS-in-JS를 위한 Vanilla Extract
 - ESLint & Prettier 설정
 - pnpm 패키지 매니저
+
+> **참고**: Vanilla Extract와의 호환성 문제로 인해 Turbopack이 현재 비활성화되어 있습니다. 개발 시 표준 Webpack 컴파일을 사용합니다.
 
 ### 시작하기
 

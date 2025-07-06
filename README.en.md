@@ -10,15 +10,13 @@ next15-template/
 │   └── app/                 # App Router directory
 │       ├── layout.tsx       # Root layout
 │       ├── page.tsx         # Home page
-│       ├── globals.css      # Global styles
+│       ├── globals.css.ts   # Global styles (Vanilla Extract)
 │       └── favicon.ico      # Favicon
 ├── public/                  # Static files
 ├── .vscode/
 │   └── settings.json       # VSCode settings
 └── config files
-    ├── next.config.ts      # Next.js configuration
-    ├── tailwind.config.ts  # Tailwind CSS configuration
-    ├── postcss.config.mjs  # PostCSS configuration
+    ├── next.config.js      # Next.js configuration (with Vanilla Extract plugin)
     ├── eslint.config.mjs   # ESLint configuration
     └── prettier.config.mjs # Prettier configuration
 ```
@@ -27,12 +25,12 @@ next15-template/
 
 - **Framework**: Next.js with App Router
 - **Language**: TypeScript for type safety
-- **Styling**: TailwindCSS utility-first framework
+- **Styling**: Vanilla Extract for zero-runtime CSS-in-JS
 - **Development**:
-  - Turbopack for faster development
   - ESLint v9 flat config & Prettier for code quality
   - Enforced import ordering and absolute imports
   - VSCode configuration included
+  - **Note**: Turbopack is disabled due to compatibility issues with Vanilla Extract
 - **Package Management**: pnpm
 
 ## Getting Started
@@ -63,6 +61,63 @@ pnpm start
 - `pnpm check`: Run format check and lint
 - `pnpm fix`: Run format and lint fix
 
+## Styling with Vanilla Extract
+
+This template uses [Vanilla Extract](https://vanilla-extract.style/) for styling, providing zero-runtime CSS-in-JS with full TypeScript support.
+
+### Why Vanilla Extract?
+
+- **Zero Runtime**: All styles are extracted at build time, resulting in zero runtime overhead
+- **Type Safety**: Full TypeScript support with autocomplete for CSS properties
+- **CSS Variables**: Built-in support for CSS custom properties and theming
+- **Framework Agnostic**: Works with any framework or library
+- **Familiar Syntax**: Uses standard CSS property names with camelCase
+
+### Basic Usage
+
+Create styles in `.css.ts` files:
+
+```typescript
+// styles.css.ts
+import { style } from '@vanilla-extract/css';
+
+export const container = style({
+  padding: '1rem',
+  backgroundColor: '#f0f0f0',
+  borderRadius: '8px',
+});
+```
+
+Use in your components:
+
+```typescript
+// component.tsx
+import { container } from './styles.css.ts';
+
+export function MyComponent() {
+  return <div className={container}>Content</div>;
+}
+```
+
+### Global Styles
+
+Global styles are defined in `src/app/globals.css.ts`:
+
+```typescript
+import { globalStyle } from '@vanilla-extract/css';
+
+globalStyle('body', {
+  margin: 0,
+  fontFamily: 'Arial, sans-serif',
+});
+```
+
+### Important Notes
+
+- **Turbopack Compatibility**: Vanilla Extract currently has compatibility issues with Next.js 15's Turbopack. This template disables Turbopack for development to ensure proper functionality.
+- **File Naming**: Style files must end with `.css.ts` to be processed by Vanilla Extract.
+- **Build Time**: Styles are generated at build time, ensuring optimal runtime performance.
+
 ## Code Quality
 
 This template uses ESLint v9 with flat config and Prettier for code quality.
@@ -72,32 +127,27 @@ This template uses ESLint v9 with flat config and Prettier for code quality.
 #### Key Features
 
 1. **TypeScript Rules**
-
    - Prevents use of `any` type (`@typescript-eslint/no-explicit-any`)
    - Enforces using `import type` for type-only imports (`@typescript-eslint/consistent-type-imports`)
    - Warns about unused variables with `_` prefix exceptions (`@typescript-eslint/no-unused-vars`)
 
 2. **React Rules**
-
    - Ensures all components in arrays have keys (`react/jsx-key`)
    - Enforces React Hooks rules (`react-hooks/rules-of-hooks`)
    - Warns about missing dependencies in hooks (`react-hooks/exhaustive-deps`)
 
 3. **Import Organization**
-
    - Organizes imports by groups with alphabetical sorting (`import/order`)
    - Groups: builtin → external → internal → parent → sibling → index → type
    - Requires blank lines between import groups
 
 4. **General Rules**
-
    - Disables native `no-unused-vars` (TypeScript handles this)
    - Enforces `const` for variables that are never reassigned (`prefer-const`)
    - Warns on console usage except `warn` and `error` (`no-console`)
    - Prevents TypeScript enum usage, recommends const assertions or union types (`no-restricted-syntax`)
 
 5. **Prettier Integration**
-
    - Prevents conflicts between ESLint and Prettier
    - Uses Prettier config for code formatting
 
@@ -106,16 +156,13 @@ This template uses ESLint v9 with flat config and Prettier for code quality.
 The ESLint configuration uses the new flat config format and includes:
 
 1. **ignoresConfig**: Defines file patterns to exclude from ESLint checks
-
    - Excludes: `dist`, `node_modules`, `build`, `.next`, `coverage`, `*.min.js`, `*.d.ts`, `.history`, `**/.git/**`
 
 2. **Base Configuration**:
-
    - ESLint recommended rules (`js.configs.recommended`)
    - Next.js built-in rules (`next/core-web-vitals`, `next/typescript`)
 
 3. **customRulesConfig**: All project-specific rules including:
-
    - TypeScript rules
    - React and React Hooks rules
    - Import organization rules
@@ -222,7 +269,7 @@ The Prettier configuration applies the following styling:
 - Sets max line length to 100 characters (`printWidth: 100`)
 - Always uses parentheses in arrow functions (`arrowParens: 'always'`)
 - Uses LF line endings (`endOfLine: 'lf'`)
-- Uses Tailwind CSS plugin (`plugins: ['prettier-plugin-tailwindcss']`)
+- Supports additional formatting plugins as needed
 
 ### IDE Integration
 
@@ -268,23 +315,19 @@ Cursor has similar settings to VSCode. If auto-formatting isn't working:
 #### Common Issues
 
 1. **Plugin Conflicts**
-
    - If you see "Cannot redefine plugin X", a plugin is being imported multiple times
    - Solution: Remove duplicate plugin imports or use the compatibility layer
 
 2. **Import Order Errors**
-
    - When seeing many import ordering errors
    - Solution: Run `pnpm run lint` to see all errors, then run `pnpm run fix` to fix automatically
 
 3. **Auto-formatting Not Working**
-
    - Ensure you have required extensions installed
    - Check that workspace settings aren't overriding project settings
    - Run "Developer: Reload Window" and check the "Output" panel (ESLint)
 
 4. **Path Alias Configuration**
-
    - For absolute imports to work correctly, ensure your `tsconfig.json` has proper path aliases:
 
    ```json
