@@ -71,52 +71,60 @@ pnpm start
 
 #### 主な機能
 
-1. **基本的なJavaScriptとTypeScriptのルール**
+1. **TypeScriptルール**
 
-   - ESLint推奨ルールを適用
-   - Next.js組み込みルール（`next/core-web-vitals`、`next/typescript`）を適用
+   - `any`型の使用を防止（`@typescript-eslint/no-explicit-any`）
+   - 型のみのインポートには`import type`の使用を強制（`@typescript-eslint/consistent-type-imports`）
+   - 未使用変数について警告、ただし`_`プレフィックス付きは除外（`@typescript-eslint/no-unused-vars`）
 
-2. **インポート順序と絶対パスの強制**
+2. **Reactルール**
 
-   - すべてのインポートが定義された順序で並べ替え
-   - モジュールタイプによるグループ化とアルファベット順でのソート
-   - 相対パス（`../`）ではなく絶対パス（`@/`）の使用を強制
+   - 配列内のすべてのコンポーネントにキーを要求（`react/jsx-key`）
+   - React Hooksルールを強制（`react-hooks/rules-of-hooks`）
+   - フック内の依存関係の不足について警告（`react-hooks/exhaustive-deps`）
 
-3. **強化されたTypeScriptルール**
+3. **インポート整理**
 
-   - 未使用変数についての警告（`@typescript-eslint/no-unused-vars`）
-   - `any`型の使用についての警告（`@typescript-eslint/no-explicit-any`）
-   - 一貫した型インポートの強制（`@typescript-eslint/consistent-type-imports`）
+   - グループ別にインポートを整理し、アルファベット順に並べ替え（`import/order`）
+   - グループ順序：builtin → external → internal → parent → sibling → index → type
+   - インポートグループ間に空行を要求
 
-4. **Prettierとの統合**
+4. **一般的なルール**
+
+   - ネイティブの`no-unused-vars`を無効化（TypeScriptが処理）
+   - 再代入されない変数には`const`を強制（`prefer-const`）
+   - `warn`と`error`以外のconsole使用について警告（`no-console`）
+   - TypeScript enumの使用を防止、const assertionsまたはunion型の使用を推奨（`no-restricted-syntax`）
+
+5. **Prettier統合**
 
    - ESLintとPrettierの間の競合を防止
-   - スタイリングにPrettier設定を使用
-
-5. **その他のカスタムルール**
-   - コンソール使用の制限（`no-console` - warnとerrorのみ許可）
+   - コードフォーマットにPrettier設定を使用
 
 #### 設定構造
 
-ESLint設定は以下のようにモジュール化されています：
+ESLint設定は新しいフラット構成形式を使用し、以下を含みます：
 
 1. **ignoresConfig**: ESLintチェックから除外するファイルパターンを定義
 
-   - node_modules、.next、dist、CSS/SCSSファイルなどを除外
+   - 除外対象：`dist`、`node_modules`、`build`、`.next`、`coverage`、`*.min.js`、`*.d.ts`、`.history`、`**/.git/**`
 
-2. **nextConfig**: Next.js組み込みのESLint設定をフラット構成形式に変換
+2. **基本設定**：
 
-3. **importRulesConfig**: インポート関連のルールを定義
+   - ESLint推奨ルール（`js.configs.recommended`）
+   - Next.js組み込みルール（`next/core-web-vitals`、`next/typescript`）
 
-   - インポート順序、グループ化、絶対パス使用などを強制
+3. **customRulesConfig**: すべてのプロジェクト固有のルールを含む：
 
-4. **customRulesConfig**: プロジェクト固有のルールを定義
+   - TypeScriptルール
+   - ReactおよびReact Hooksルール
+   - インポート整理ルール
+   - 一般的なJavaScriptルール
+   - Prettier統合
 
-   - TypeScript関連のルールなどのカスタムルール
-
-5. **prettierConfig**: PrettierをESLintと統合
-   - ESLintにPrettierルールを適用
-   - 競合を防止する設定を含む
+4. **Prettier設定**：
+   - 競合するルールを無効化するESLint Config Prettier
+   - フォーマット用のPrettierプラグイン
 
 #### 主要なルール
 
@@ -129,11 +137,10 @@ ESLint設定は以下のようにモジュール化されています：
     groups: [
       'builtin',     // Node.js組み込みモジュール
       'external',    // 外部パッケージ
-      'internal',    // 絶対パスインポート
+      'internal',    // 内部モジュール
       'parent',      // 親ディレクトリインポート
       'sibling',     // 同じディレクトリインポート
       'index',       // インデックスインポート
-      'object',      // オブジェクトインポート
       'type',        // 型インポート
     ],
     'newlines-between': 'always',  // グループ間に空行を要求
@@ -141,30 +148,6 @@ ESLint設定は以下のようにモジュール化されています：
       order: 'asc',
       caseInsensitive: true
     },
-    pathGroups: [
-      {
-        pattern: '@/**',           // '@/'で始まるすべてのインポート
-        group: 'internal',
-        position: 'before'
-      }
-    ],
-    pathGroupsExcludedImportTypes: ['builtin']
-  }
-]
-```
-
-##### 絶対パス強制ルール
-
-```javascript
-'no-restricted-imports': [
-  'error',
-  {
-    patterns: [
-      {
-        group: ['../*'],           // '../'インポートを禁止
-        message: '相対インポートではなく絶対インポートを使用してください'
-      }
-    ]
   }
 ]
 ```
@@ -172,15 +155,60 @@ ESLint設定は以下のようにモジュール化されています：
 ##### TypeScriptルール
 
 ```javascript
-'@typescript-eslint/no-unused-vars': [
-  'warn',
+// 'any'型の使用を防止
+'@typescript-eslint/no-explicit-any': 'error',
+
+// 型のみのインポートには型インポートを強制
+'@typescript-eslint/consistent-type-imports': [
+  'error',
   {
-    argsIgnorePattern: '^_',       // '_'で始まる引数は無視
-    varsIgnorePattern: '^_',       // '_'で始まる変数は無視
+    prefer: 'type-imports',
+    fixStyle: 'inline-type-imports',
   },
 ],
-'@typescript-eslint/no-explicit-any': 'warn',        // 'any'型使用時に警告
-'@typescript-eslint/consistent-type-imports': 'error', // 'import type'の使用を強制
+
+// 未使用変数について警告（例外付き）
+'@typescript-eslint/no-unused-vars': [
+  'error',
+  {
+    argsIgnorePattern: '^_',           // '_'で始まる引数は無視
+    varsIgnorePattern: '^_',           // '_'で始まる変数は無視
+    caughtErrorsIgnorePattern: '^_',  // '_'で始まるキャッチエラーは無視
+  },
+],
+```
+
+##### Reactルール
+
+```javascript
+// 配列のすべてのコンポーネントにキーを要求
+'react/jsx-key': ['error', { checkFragmentShorthand: true }],
+
+// React Hooksルールを強制
+'react-hooks/rules-of-hooks': 'error',
+'react-hooks/exhaustive-deps': 'warn',
+```
+
+##### 一般的なルール
+
+```javascript
+// ベースルールを無効化（TypeScriptルールが処理）
+'no-unused-vars': 'off',
+
+// 変更されない変数にはconstを強制
+'prefer-const': 'error',
+
+// console使用を制限
+'no-console': ['warn', { allow: ['warn', 'error'] }],
+
+// TypeScript enumの使用を防止
+'no-restricted-syntax': [
+  'error',
+  {
+    selector: 'TSEnumDeclaration',
+    message: 'Use const assertions or union types instead of enums.',
+  },
+],
 ```
 
 ### Prettier設定

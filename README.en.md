@@ -71,56 +71,64 @@ This template uses ESLint v9 with flat config and Prettier for code quality.
 
 #### Key Features
 
-1. **Basic JavaScript and TypeScript Rules**
+1. **TypeScript Rules**
 
-   - Applies ESLint recommended rules
-   - Applies Next.js built-in rules (`next/core-web-vitals`, `next/typescript`)
+   - Prevents use of `any` type (`@typescript-eslint/no-explicit-any`)
+   - Enforces using `import type` for type-only imports (`@typescript-eslint/consistent-type-imports`)
+   - Warns about unused variables with `_` prefix exceptions (`@typescript-eslint/no-unused-vars`)
 
-2. **Import Order and Absolute Path Enforcement**
+2. **React Rules**
 
-   - All imports are sorted in a predefined order
-   - Grouping by module type and alphabetical sorting
-   - Forces the use of absolute paths (`@/`) instead of relative paths (`../`)
+   - Ensures all components in arrays have keys (`react/jsx-key`)
+   - Enforces React Hooks rules (`react-hooks/rules-of-hooks`)
+   - Warns about missing dependencies in hooks (`react-hooks/exhaustive-deps`)
 
-3. **Enhanced TypeScript Rules**
+3. **Import Organization**
 
-   - Warns about unused variables (`@typescript-eslint/no-unused-vars`)
-   - Warns about using the `any` type (`@typescript-eslint/no-explicit-any`)
-   - Enforces consistent type imports (`@typescript-eslint/consistent-type-imports`)
+   - Organizes imports by groups with alphabetical sorting (`import/order`)
+   - Groups: builtin → external → internal → parent → sibling → index → type
+   - Requires blank lines between import groups
 
-4. **Prettier Integration**
+4. **General Rules**
+
+   - Disables native `no-unused-vars` (TypeScript handles this)
+   - Enforces `const` for variables that are never reassigned (`prefer-const`)
+   - Warns on console usage except `warn` and `error` (`no-console`)
+   - Prevents TypeScript enum usage, recommends const assertions or union types (`no-restricted-syntax`)
+
+5. **Prettier Integration**
 
    - Prevents conflicts between ESLint and Prettier
-   - Uses Prettier config for styling
-
-5. **Other Custom Rules**
-   - Restricts console usage (`no-console` - only allows warn/error)
+   - Uses Prettier config for code formatting
 
 #### Configuration Structure
 
-The ESLint configuration is modularized as follows:
+The ESLint configuration uses the new flat config format and includes:
 
 1. **ignoresConfig**: Defines file patterns to exclude from ESLint checks
 
-   - Excludes node_modules, .next, dist, CSS/SCSS files, etc.
+   - Excludes: `dist`, `node_modules`, `build`, `.next`, `coverage`, `*.min.js`, `*.d.ts`, `.history`, `**/.git/**`
 
-2. **nextConfig**: Converts Next.js built-in ESLint settings to flat config format
+2. **Base Configuration**:
 
-3. **importRulesConfig**: Defines import-related rules
+   - ESLint recommended rules (`js.configs.recommended`)
+   - Next.js built-in rules (`next/core-web-vitals`, `next/typescript`)
 
-   - Enforces import order, grouping, absolute path usage, etc.
+3. **customRulesConfig**: All project-specific rules including:
 
-4. **customRulesConfig**: Defines project-specific rules
+   - TypeScript rules
+   - React and React Hooks rules
+   - Import organization rules
+   - General JavaScript rules
+   - Prettier integration
 
-   - TypeScript-related rules and other custom rules
-
-5. **prettierConfig**: Integrates Prettier with ESLint
-   - Applies Prettier rules to ESLint
-   - Includes settings to prevent conflicts
+4. **Prettier Configuration**:
+   - ESLint Config Prettier to disable conflicting rules
+   - Prettier plugin for formatting
 
 #### Key Rules
 
-##### Import Order Rules
+##### Import Order Rule
 
 ```javascript
 'import/order': [
@@ -129,11 +137,10 @@ The ESLint configuration is modularized as follows:
     groups: [
       'builtin',     // Node.js built-in modules
       'external',    // External packages
-      'internal',    // Absolute path imports
+      'internal',    // Internal modules
       'parent',      // Parent directory imports
       'sibling',     // Same directory imports
       'index',       // Index imports
-      'object',      // Object imports
       'type',        // Type imports
     ],
     'newlines-between': 'always',  // Blank lines between groups
@@ -141,30 +148,6 @@ The ESLint configuration is modularized as follows:
       order: 'asc',
       caseInsensitive: true
     },
-    pathGroups: [
-      {
-        pattern: '@/**',           // All imports with '@/'
-        group: 'internal',
-        position: 'before'
-      }
-    ],
-    pathGroupsExcludedImportTypes: ['builtin']
-  }
-]
-```
-
-##### Absolute Path Enforcement Rule
-
-```javascript
-'no-restricted-imports': [
-  'error',
-  {
-    patterns: [
-      {
-        group: ['../*'],           // Prohibit '../' imports
-        message: 'Use absolute imports instead of relative imports'
-      }
-    ]
   }
 ]
 ```
@@ -172,15 +155,60 @@ The ESLint configuration is modularized as follows:
 ##### TypeScript Rules
 
 ```javascript
-'@typescript-eslint/no-unused-vars': [
-  'warn',
+// Prevent use of 'any' type
+'@typescript-eslint/no-explicit-any': 'error',
+
+// Enforce type imports for type-only imports
+'@typescript-eslint/consistent-type-imports': [
+  'error',
   {
-    argsIgnorePattern: '^_',       // Ignore '_' prefixed args
-    varsIgnorePattern: '^_',       // Ignore '_' prefixed vars
+    prefer: 'type-imports',
+    fixStyle: 'inline-type-imports',
   },
 ],
-'@typescript-eslint/no-explicit-any': 'warn',
-'@typescript-eslint/consistent-type-imports': 'error',
+
+// Warn about unused variables (with exceptions)
+'@typescript-eslint/no-unused-vars': [
+  'error',
+  {
+    argsIgnorePattern: '^_',           // Ignore '_' prefixed args
+    varsIgnorePattern: '^_',           // Ignore '_' prefixed vars
+    caughtErrorsIgnorePattern: '^_',  // Ignore '_' prefixed caught errors
+  },
+],
+```
+
+##### React Rules
+
+```javascript
+// Ensure all array components have keys
+'react/jsx-key': ['error', { checkFragmentShorthand: true }],
+
+// Enforce React Hooks rules
+'react-hooks/rules-of-hooks': 'error',
+'react-hooks/exhaustive-deps': 'warn',
+```
+
+##### General Rules
+
+```javascript
+// Disable base rule (TypeScript rule handles this)
+'no-unused-vars': 'off',
+
+// Enforce const for unchanged variables
+'prefer-const': 'error',
+
+// Restrict console usage
+'no-console': ['warn', { allow: ['warn', 'error'] }],
+
+// Prevent TypeScript enum usage
+'no-restricted-syntax': [
+  'error',
+  {
+    selector: 'TSEnumDeclaration',
+    message: 'Use const assertions or union types instead of enums.',
+  },
+],
 ```
 
 ### Prettier Configuration

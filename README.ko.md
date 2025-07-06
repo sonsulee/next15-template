@@ -71,52 +71,60 @@ pnpm start
 
 #### 주요 기능
 
-1. **기본 JavaScript 및 TypeScript 규칙**
+1. **TypeScript 규칙**
 
-   - ESLint 권장 규칙 적용
-   - Next.js 내장 규칙(`next/core-web-vitals`, `next/typescript`) 적용
+   - `any` 타입 사용 방지(`@typescript-eslint/no-explicit-any`)
+   - 타입 전용 import에는 `import type` 사용 강제(`@typescript-eslint/consistent-type-imports`)
+   - 미사용 변수에 대한 경고, `_` 접두사 예외 처리(`@typescript-eslint/no-unused-vars`)
 
-2. **import 순서 및 절대 경로 강제**
+2. **React 규칙**
 
-   - 모든 import가 정의된 순서대로 정렬
-   - 모듈 타입별 그룹화 및 알파벳 순 정렬
-   - 상대 경로(`../`) 대신 절대 경로(`@/`) 사용 강제
+   - 배열 내 모든 컴포넌트에 키 요구(`react/jsx-key`)
+   - React Hooks 규칙 강제(`react-hooks/rules-of-hooks`)
+   - 훅 내 누락된 종속성에 대한 경고(`react-hooks/exhaustive-deps`)
 
-3. **강화된 TypeScript 규칙**
+3. **Import 정렬**
 
-   - 사용하지 않는 변수에 대한 경고(`@typescript-eslint/no-unused-vars`)
-   - `any` 타입 사용에 대한 경고(`@typescript-eslint/no-explicit-any`)
-   - 일관된 타입 import 강제(`@typescript-eslint/consistent-type-imports`)
+   - 그룹별로 import를 정렬하고 알파벳 순으로 정렬(`import/order`)
+   - 그룹 순서: builtin → external → internal → parent → sibling → index → type
+   - import 그룹 간 빈 줄 요구
 
-4. **Prettier 통합**
+4. **일반 규칙**
+
+   - 네이티브 `no-unused-vars` 비활성화(TypeScript가 처리)
+   - 재할당되지 않는 변수에 `const` 강제(`prefer-const`)
+   - `warn`과 `error` 제외한 console 사용에 대한 경고(`no-console`)
+   - TypeScript enum 사용 방지, const assertions 또는 union 타입 사용 권장(`no-restricted-syntax`)
+
+5. **Prettier 통합**
 
    - ESLint와 Prettier 간의 충돌 방지
-   - 스타일링에 Prettier 설정 사용
-
-5. **기타 사용자 정의 규칙**
-   - 콘솔 사용 제한(`no-console` - warn과 error만 허용)
+   - 코드 포매팅에 Prettier 설정 사용
 
 #### 설정 구조
 
-ESLint 설정은 다음과 같이 모듈화되어 있습니다:
+ESLint 설정은 새로운 플랫 설정 형식을 사용하며 다음을 포함합니다:
 
 1. **ignoresConfig**: ESLint 검사에서 제외할 파일 패턴 정의
 
-   - node_modules, .next, dist, CSS/SCSS 파일 등 제외
+   - 제외 대상: `dist`, `node_modules`, `build`, `.next`, `coverage`, `*.min.js`, `*.d.ts`, `.history`, `**/.git/**`
 
-2. **nextConfig**: Next.js 내장 ESLint 설정을 플랫 설정 형식으로 변환
+2. **기본 설정**:
 
-3. **importRulesConfig**: import 관련 규칙 정의
+   - ESLint 권장 규칙(`js.configs.recommended`)
+   - Next.js 내장 규칙(`next/core-web-vitals`, `next/typescript`)
 
-   - import 순서, 그룹화, 절대 경로 사용 등 강제
+3. **customRulesConfig**: 모든 프로젝트 특정 규칙을 포함:
 
-4. **customRulesConfig**: 프로젝트 특정 규칙 정의
+   - TypeScript 규칙
+   - React 및 React Hooks 규칙
+   - Import 정렬 규칙
+   - 일반 JavaScript 규칙
+   - Prettier 통합
 
-   - TypeScript 관련 규칙 및 기타 사용자 정의 규칙
-
-5. **prettierConfig**: Prettier를 ESLint와 통합
-   - ESLint에 Prettier 규칙 적용
-   - 충돌 방지 설정 포함
+4. **Prettier 설정**:
+   - 충돌하는 규칙을 비활성화하는 ESLint Config Prettier
+   - 포매팅을 위한 Prettier 플러그인
 
 #### 주요 규칙
 
@@ -129,11 +137,10 @@ ESLint 설정은 다음과 같이 모듈화되어 있습니다:
     groups: [
       'builtin',     // Node.js 내장 모듈
       'external',    // 외부 패키지
-      'internal',    // 절대 경로 import
+      'internal',    // 내부 모듈
       'parent',      // 부모 디렉토리 import
       'sibling',     // 같은 디렉토리 import
       'index',       // 인덱스 import
-      'object',      // 객체 import
       'type',        // 타입 import
     ],
     'newlines-between': 'always',  // 그룹 간 빈 줄 요구
@@ -141,30 +148,6 @@ ESLint 설정은 다음과 같이 모듈화되어 있습니다:
       order: 'asc',
       caseInsensitive: true
     },
-    pathGroups: [
-      {
-        pattern: '@/**',           // '@/'로 시작하는 모든 import
-        group: 'internal',
-        position: 'before'
-      }
-    ],
-    pathGroupsExcludedImportTypes: ['builtin']
-  }
-]
-```
-
-##### 절대 경로 강제 규칙
-
-```javascript
-'no-restricted-imports': [
-  'error',
-  {
-    patterns: [
-      {
-        group: ['../*'],           // '../' import 금지
-        message: '상대 경로 대신 절대 경로를 사용하세요'
-      }
-    ]
   }
 ]
 ```
@@ -172,15 +155,60 @@ ESLint 설정은 다음과 같이 모듈화되어 있습니다:
 ##### TypeScript 규칙
 
 ```javascript
-'@typescript-eslint/no-unused-vars': [
-  'warn',
+// 'any' 타입 사용 방지
+'@typescript-eslint/no-explicit-any': 'error',
+
+// 타입 전용 import에 타입 import 강제
+'@typescript-eslint/consistent-type-imports': [
+  'error',
   {
-    argsIgnorePattern: '^_',       // '_'로 시작하는 인자는 무시
-    varsIgnorePattern: '^_',       // '_'로 시작하는 변수는 무시
+    prefer: 'type-imports',
+    fixStyle: 'inline-type-imports',
   },
 ],
-'@typescript-eslint/no-explicit-any': 'warn',        // 'any' 타입 사용 시 경고
-'@typescript-eslint/consistent-type-imports': 'error', // 'import type' 사용 강제
+
+// 미사용 변수에 대한 경고(예외 포함)
+'@typescript-eslint/no-unused-vars': [
+  'error',
+  {
+    argsIgnorePattern: '^_',           // '_'로 시작하는 인자는 무시
+    varsIgnorePattern: '^_',           // '_'로 시작하는 변수는 무시
+    caughtErrorsIgnorePattern: '^_',  // '_'로 시작하는 catch 오류는 무시
+  },
+],
+```
+
+##### React 규칙
+
+```javascript
+// 배열의 모든 컴포넌트에 키 요구
+'react/jsx-key': ['error', { checkFragmentShorthand: true }],
+
+// React Hooks 규칙 강제
+'react-hooks/rules-of-hooks': 'error',
+'react-hooks/exhaustive-deps': 'warn',
+```
+
+##### 일반 규칙
+
+```javascript
+// 기본 규칙 비활성화(TypeScript 규칙이 처리)
+'no-unused-vars': 'off',
+
+// 변경되지 않는 변수에 const 강제
+'prefer-const': 'error',
+
+// console 사용 제한
+'no-console': ['warn', { allow: ['warn', 'error'] }],
+
+// TypeScript enum 사용 방지
+'no-restricted-syntax': [
+  'error',
+  {
+    selector: 'TSEnumDeclaration',
+    message: 'Use const assertions or union types instead of enums.',
+  },
+],
 ```
 
 ### Prettier 설정

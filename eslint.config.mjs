@@ -1,135 +1,119 @@
 import { fixupConfigRules } from '@eslint/compat';
 import { FlatCompat } from '@eslint/eslintrc';
 import js from '@eslint/js';
-import eslintPluginPrettier from 'eslint-plugin-prettier';
+import eslintConfigPrettier from 'eslint-config-prettier';
+import prettierPlugin from 'eslint-plugin-prettier';
 import globals from 'globals';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 
-// Path resolution for ESM
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// Create compatibility layer for Next.js ESLint config
 const compat = new FlatCompat({
   baseDirectory: __dirname,
 });
 
-// Global ignores
 const ignoresConfig = {
   ignores: [
-    'node_modules/**',
-    '.next/**',
-    'dist/**',
+    'dist',
+    'node_modules',
+    'build',
+    '.next',
+    'coverage',
+    '*.min.js',
+    '*.d.ts',
+    '.history',
     '**/.git/**',
-    '**/*.css', // Ignore CSS files for ESLint
-    '**/*.scss', // Ignore SCSS files for ESLint
   ],
 };
 
-// Language options shared across configurations
-const languageOptions = {
-  globals: {
-    ...globals.browser,
-    ...globals.es2022,
-    ...globals.node,
-  },
-  ecmaVersion: 'latest',
-  sourceType: 'module',
-  parserOptions: {
-    project: './tsconfig.json',
-  },
-};
+const customRulesConfig = {
+  files: ['**/*.{ts,tsx,js,jsx}'],
 
-// Next.js config (using compatibility mode since Next.js hasn't fully migrated to flat config)
-const nextConfig = fixupConfigRules([...compat.extends('next/core-web-vitals', 'next/typescript')]);
+  languageOptions: {
+    ecmaVersion: 'latest',
+    sourceType: 'module',
+    globals: {
+      ...globals.browser,
+      ...globals.node,
+    },
+    parserOptions: {
+      project: './tsconfig.json',
+      tsconfigRootDir: __dirname,
+    },
+  },
 
-// Import and path rules configuration
-const importRulesConfig = {
-  files: ['**/*.{js,jsx,ts,tsx}'],
+  settings: {
+    react: {
+      version: 'detect',
+    },
+  },
+
+  plugins: {
+    prettier: prettierPlugin,
+  },
+
   rules: {
-    // Enforce import order
+    // TypeScript
+    '@typescript-eslint/no-explicit-any': 'error',
+    '@typescript-eslint/consistent-type-imports': [
+      'error',
+      {
+        prefer: 'type-imports',
+        fixStyle: 'inline-type-imports',
+      },
+    ],
+    '@typescript-eslint/no-unused-vars': [
+      'error',
+      {
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_',
+        caughtErrorsIgnorePattern: '^_',
+      },
+    ],
+
+    // React
+    'react/jsx-key': ['error', { checkFragmentShorthand: true }],
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'warn',
+
+    // Import
     'import/order': [
       'error',
       {
-        groups: [
-          'builtin', // Node.js built-in modules
-          'external', // External packages
-          'internal', // Absolute imports
-          'parent', // Imports from parent directories
-          'sibling', // Imports from sibling directories
-          'index', // Index imports
-          'object', // Object imports
-          'type', // Type imports
-        ],
+        groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'type'],
         'newlines-between': 'always',
         alphabetize: {
           order: 'asc',
           caseInsensitive: true,
         },
-        pathGroups: [
-          {
-            pattern: '@/**', // All imports starting with @ (absolute paths)
-            group: 'internal',
-            position: 'before',
-          },
-        ],
-        pathGroupsExcludedImportTypes: ['builtin'],
       },
     ],
-    // Enforce absolute imports
-    'no-restricted-imports': [
+
+    // General
+    'no-unused-vars': 'off',
+    'prefer-const': 'error',
+    'no-console': ['warn', { allow: ['warn', 'error'] }],
+    'no-restricted-syntax': [
       'error',
       {
-        patterns: [
-          {
-            group: ['../*'],
-            message: 'Use absolute imports instead of relative imports',
-          },
-        ],
+        selector: 'TSEnumDeclaration',
+        message: 'Use const assertions or union types instead of enums.',
       },
     ],
-  },
-};
 
-// Prettier configuration - must come last to override any conflicting rules
-const prettierConfig = {
-  files: ['**/*.{js,jsx,ts,tsx}'], // Removed CSS and SCSS from Prettier via ESLint
-  plugins: {
-    prettier: eslintPluginPrettier,
-  },
-  rules: {
+    // Prettier
     'prettier/prettier': ['error', {}, { usePrettierrc: true }],
-    // Disable eslint rules that conflict with prettier
-    'arrow-body-style': 'off',
-    'prefer-arrow-callback': 'off',
   },
 };
 
-// Custom rules configuration
-const customRulesConfig = {
-  files: ['**/*.{js,jsx,ts,tsx}'],
-  languageOptions,
-  rules: {
-    'no-console': ['warn', { allow: ['warn', 'error'] }],
-    '@typescript-eslint/no-unused-vars': [
-      'warn',
-      {
-        argsIgnorePattern: '^_',
-        varsIgnorePattern: '^_',
-      },
-    ],
-    '@typescript-eslint/no-explicit-any': 'warn',
-    '@typescript-eslint/consistent-type-imports': 'error',
-  },
-};
-
-export default [
-  // Order matters! Configs at the bottom override earlier configs
+const config = [
   ignoresConfig,
   js.configs.recommended,
-  ...nextConfig,
-  importRulesConfig, // Import rules to enforce absolute paths and import order
+  ...fixupConfigRules(compat.extends('next/core-web-vitals', 'next/typescript')),
   customRulesConfig,
-  prettierConfig, // Prettier must be last to override conflicting rules
+  eslintConfigPrettier,
 ];
+
+export default config;
