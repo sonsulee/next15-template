@@ -6,6 +6,7 @@ import prettierPlugin from 'eslint-plugin-prettier';
 import globals from 'globals';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
+import stylexPlugin from '@stylexjs/eslint-plugin';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -51,6 +52,7 @@ const customRulesConfig = {
   },
 
   plugins: {
+    '@stylexjs': stylexPlugin,
     prettier: prettierPlugin,
   },
 
@@ -102,6 +104,12 @@ const customRulesConfig = {
         message: 'Use const assertions or union types instead of enums.',
       },
     ],
+
+    // stylex
+    '@stylexjs/valid-styles': 'error',
+    '@stylexjs/no-unused': 'error',
+    '@stylexjs/valid-shorthands': 'warning',
+    '@stylexjs/sort-keys': 'warning',
 
     // Prettier
     'prettier/prettier': ['error', {}, { usePrettierrc: true }],
