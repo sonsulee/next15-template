@@ -7,33 +7,97 @@ Next.jsエコシステムの最新のアップデートと改善を取り入れ�
 ```shell
 next15-template/
 ├── src/
-│   └── app/                 # App Routerディレクトリ
-│       ├── layout.tsx       # ルートレイアウト
-│       ├── page.tsx         # ホームページ
-│       ├── globals.css      # グローバルスタイル
-│       └── favicon.ico      # ファビコン
+│   ├── app/                 # App Routerディレクトリ
+│   │   ├── layout.tsx       # StyleXプロバイダー付きルートレイアウト
+│   │   ├── page.tsx         # ホームページ
+│   │   ├── page.styles.ts   # StyleXスタイル
+│   │   ├── globals.css      # グローバルスタイル
+│   │   └── favicon.ico      # ファビコン
+│   ├── components/          # 再利用可能なコンポーネント
+│   │   └── Button/          # StyleX使用例のコンポーネント
+│   │       ├── Button.tsx
+│   │       ├── Button.styles.ts
+│   │       └── index.ts
+│   └── tokens/              # StyleXデザイントークン
+│       └── index.stylex.ts  # カラー、スペーシング、タイポグラフィトークン
 ├── public/                  # 静的ファイル
 ├── .vscode/
 │   └── settings.json       # VSCode設定
 └── 設定ファイル
-    ├── next.config.ts      # Next.js設定
-    ├── tailwind.config.ts  # Tailwind CSS設定
+    ├── next.config.ts      # Next.js + StyleX設定
     ├── postcss.config.mjs  # PostCSS設定
-    ├── eslint.config.mjs   # ESLint設定
+    ├── eslint.config.mjs   # ESLint + StyleXプラグイン設定
     └── prettier.config.mjs # Prettier設定
 ```
 
 ## 特徴
 
-- **フレームワーク**: App Router対応のNext.js
-- **言語**: 型安全性のためのTypeScript
-- **スタイリング**: ユーティリティファーストのTailwindCSS
+- **フレームワーク**: App Router対応のNext.js 15.3.5
+- **言語**: 型安全性のためのTypeScript 5.8.3
+- **スタイリング**: コンパイル時最適化を備えたStyleX CSS-in-JS
 - **開発環境**:
-  - 高速な開発のためのTurbopack
+  - ~~高速な開発のためのTurbopack~~ (StyleX SWCバージョン使用のために必要な@next/eslint-plugin-nextがwebpackでラップされているためturbopack使用不可)
   - コード品質のためのESLint v9フラット設定とPrettier
+  - スタイル検証のためのStyleX ESLintプラグイン
   - インポート順序の強制と絶対パスインポート
   - VSCode設定included
-- **パッケージ管理**: pnpm
+- **パッケージ管理**: pnpm 10.11.0
+
+## StyleX統合
+
+このテンプレートでは、コンパイル時最適化を備えた**StyleX** CSS-in-JSスタイリングを使用しています。StyleXは以下を提供します：
+
+- **型安全なスタイリング**: オートコンプリート機能付きの完全なTypeScriptサポート
+- **コンパイル時最適化**: ビルド時にスタイルが抽出・最適化される
+- **アトミックCSS生成**: アトミックCSSクラスを自動生成
+- **デザイントークン**: `tokens/index.stylex.ts`による一元的なテーマ管理
+- **共存配置**: スタイル定義をコンポーネントと一緒に配置可能
+
+### このテンプレートの主要なStyleX機能
+
+1. **デザイントークン**: カラー、スペーシング、タイポグラフィの一元的な定義
+2. **コンポーネントスタイル**: 各コンポーネントに独自の`.styles.ts`ファイル
+3. **SWCコンパイラー**: `@stylexswc/nextjs-plugin`による高速コンパイル
+4. **ESLint統合**: `@stylexjs/eslint-plugin`によるスタイル検証
+
+### 使用例
+
+```typescript
+// tokens/index.stylex.ts
+import * as stylex from '@stylexjs/stylex';
+
+export const colors = stylex.defineVars({
+  primary: '#007bff',
+  secondary: '#6c757d',
+});
+
+// components/Button/Button.styles.ts
+import * as stylex from '@stylexjs/stylex';
+import { colors } from '@/tokens/index.stylex';
+
+export const styles = stylex.create({
+  button: {
+    backgroundColor: colors.primary,
+    color: 'white',
+    padding: '8px 16px',
+    borderRadius: '4px',
+    border: 'none',
+    cursor: 'pointer',
+  },
+});
+
+// components/Button/Button.tsx
+import * as stylex from '@stylexjs/stylex';
+import { styles } from './Button.styles';
+
+export function Button({ children, ...props }) {
+  return (
+    <button {...stylex.props(styles.button)} {...props}>
+      {children}
+    </button>
+  );
+}
+```
 
 ## 始め方
 
@@ -72,32 +136,32 @@ pnpm start
 #### 主な機能
 
 1. **TypeScriptルール**
-
    - `any`型の使用を防止（`@typescript-eslint/no-explicit-any`）
    - 型のみのインポートには`import type`の使用を強制（`@typescript-eslint/consistent-type-imports`）
    - 未使用変数について警告、ただし`_`プレフィックス付きは除外（`@typescript-eslint/no-unused-vars`）
 
 2. **Reactルール**
-
    - 配列内のすべてのコンポーネントにキーを要求（`react/jsx-key`）
    - React Hooksルールを強制（`react-hooks/rules-of-hooks`）
    - フック内の依存関係の不足について警告（`react-hooks/exhaustive-deps`）
 
 3. **インポート整理**
-
    - グループ別にインポートを整理し、アルファベット順に並べ替え（`import/order`）
    - グループ順序：builtin → external → internal → parent → sibling → index → type
    - インポートグループ間に空行を要求
 
 4. **一般的なルール**
-
    - ネイティブの`no-unused-vars`を無効化（TypeScriptが処理）
    - 再代入されない変数には`const`を強制（`prefer-const`）
    - `warn`と`error`以外のconsole使用について警告（`no-console`）
    - TypeScript enumの使用を防止、const assertionsまたはunion型の使用を推奨（`no-restricted-syntax`）
 
-5. **Prettier統合**
+5. **StyleX統合**
+   - スタイル検証のためのStyleX ESLintプラグイン（`@stylexjs/eslint-plugin`）
+   - StyleXのベストプラクティスの強制と一般的なミスの防止
+   - デザイントークンの使用とスタイル定義の検証
 
+6. **Prettier統合**
    - ESLintとPrettierの間の競合を防止
    - コードフォーマットにPrettier設定を使用
 
@@ -106,16 +170,13 @@ pnpm start
 ESLint設定は新しいフラット構成形式を使用し、以下を含みます：
 
 1. **ignoresConfig**: ESLintチェックから除外するファイルパターンを定義
-
    - 除外対象：`dist`、`node_modules`、`build`、`.next`、`coverage`、`*.min.js`、`*.d.ts`、`.history`、`**/.git/**`
 
 2. **基本設定**：
-
    - ESLint推奨ルール（`js.configs.recommended`）
    - Next.js組み込みルール（`next/core-web-vitals`、`next/typescript`）
 
 3. **customRulesConfig**: すべてのプロジェクト固有のルールを含む：
-
    - TypeScriptルール
    - ReactおよびReact Hooksルール
    - インポート整理ルール
@@ -222,7 +283,7 @@ Prettier設定は以下のスタイリングを適用します：
 - 最大行長を100文字に設定（`printWidth: 100`）
 - アロー関数では常に括弧を使用（`arrowParens: 'always'`）
 - LF改行を使用（`endOfLine: 'lf'`）
-- Tailwind CSSプラグインを使用（`plugins: ['prettier-plugin-tailwindcss']`）
+- スタイリング固有のプラグインは不要（StyleXが独自のフォーマットを処理）
 
 ### IDE統合
 
@@ -268,23 +329,19 @@ CursorはVSCodeと類似の設定を持っています。自動フォーマッ�
 #### 一般的な問題
 
 1. **プラグインの競合**
-
    - 「Cannot redefine plugin X」のエラーが表示される場合、プラグインが複数回インポートされています
    - 解決策：重複するプラグインインポートを削除するか、互換性レイヤーを使用する
 
 2. **インポート順序エラー**
-
    - インポート順序に関する多くのエラーが表示される場合
    - 解決策：`pnpm run lint`を実行してすべてのエラーを確認し、`pnpm run fix`を実行して自動修正する
 
 3. **自動フォーマットが機能しない**
-
    - 必要な拡張機能がインストールされていることを確認
    - ワークスペース設定がプロジェクト設定を上書きしていないか確認
    - 「Developer: Reload Window」を実行し、「Output」パネル（ESLint）を確認
 
 4. **パスエイリアス設定**
-
    - 絶対インポートが正しく動作するには、`tsconfig.json`に適切なパスエイリアスがあることを確認：
 
    ```json

@@ -18,11 +18,11 @@ This is a modern Next.js 15 template project with the latest features and best p
 
 ### Features
 
-- Next.js 15.1.6 with App Router
-- React 19
-- TypeScript 5.7.3
-- TailwindCSS 3.4
-- Turbopack for development
+- Next.js 15.3.5 with App Router
+- React 19.1.0
+- TypeScript 5.8.3
+- StyleX for CSS-in-JS styling
+- ~~Turbopack for development~~ (Cannot use Turbopack because @next/eslint-plugin-next required for StyleX SWC version is wrapped with webpack)
 - ESLint & Prettier configuration
 - pnpm package manager
 
@@ -48,11 +48,11 @@ pnpm start
 
 ### 特徴
 
-- Next.js 15.1.6（App Router対応）
-- React 19
-- TypeScript 5.7.3
-- TailwindCSS 3.4
-- 開発環境用Turbopack
+- Next.js 15.3.5（App Router対応）
+- React 19.1.0
+- TypeScript 5.8.3
+- StyleX による CSS-in-JS スタイリング
+- ~~開発環境用Turbopack~~(stylex swcバージョンではturbopack支援していない)
 - ESLint & Prettier設定
 - pnpmパッケージマネージャー
 
@@ -78,11 +78,11 @@ pnpm start
 
 ### 특징
 
-- Next.js 15.1.6 (App Router 지원)
-- React 19
-- TypeScript 5.7.3
-- TailwindCSS 3.4
-- Turbopack 개발 서버
+- Next.js 15.3.5 (App Router 지원)
+- React 19.1.0
+- TypeScript 5.8.3
+- StyleX CSS-in-JS 스타일링
+- ~~Turbopack 개발 서버~~(stylex swc 버전 사용을 위해 turbopack 사용 금지)
 - ESLint & Prettier 설정
 - pnpm 패키지 매니저
 
