@@ -18,7 +18,7 @@ export default stylexPlugin({
   },
   stylexImports: ['@stylexjs/stylex'], // default
   useCSSLayers: true,
-  transformCss: async (css, filePath) => {
+  transformCss: async (css: string, filePath: string) => {
     const postcss = require('postcss');
     const result = await postcss([require('autoprefixer')]).process(css, {
       from: filePath,
