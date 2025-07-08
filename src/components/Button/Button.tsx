@@ -1,5 +1,6 @@
-import React from 'react';
 import * as stylex from '@stylexjs/stylex';
+import React from 'react';
+
 import { buttonStyles } from './Button.styles';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {

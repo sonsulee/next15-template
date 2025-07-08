@@ -1,14 +1,15 @@
 import * as stylex from '@stylexjs/stylex';
+
 import { colors, spacing, typography } from '../tokens/index.stylex';
 
 export const styles = stylex.create({
   page: {
-    minHeight: '100vh',
+    alignItems: 'center',
     backgroundColor: colors.background,
     color: colors.text,
     display: 'flex',
-    alignItems: 'center',
     justifyContent: 'center',
+    minHeight: '100vh',
   },
 
   hero: {
@@ -17,37 +18,38 @@ export const styles = stylex.create({
   },
 
   heroContent: {
+    marginBlock: '0',
+    marginInline: 'auto',
     maxWidth: '600px',
-    margin: '0 auto',
   },
 
   heroTitle: {
-    fontSize: '48px',
-    fontWeight: '700',
-    marginBottom: spacing.lg,
-    background: `linear-gradient(135deg, ${colors.text}, ${colors.primary})`,
-    backgroundClip: 'text',
     WebkitBackgroundClip: 'text',
     WebkitTextFillColor: 'transparent',
-    '@media (max-width: 767px)': {
-      fontSize: '32px',
+    background: `linear-gradient(135deg, ${colors.text}, ${colors.primary})`,
+    backgroundClip: 'text',
+    fontSize: {
+      default: '48px',
+      '@media (max-width: 767px)': '32px',
     },
+    fontWeight: 700,
+    marginBottom: spacing.lg,
   },
 
   heroSubtitle: {
-    fontSize: typography.fontSizeLg,
     color: colors.textMuted,
-    marginBottom: spacing.xl,
-    '@media (max-width: 767px)': {
-      fontSize: typography.fontSize,
+    fontSize: {
+      default: typography.fontSizeLg,
+      '@media (max-width: 767px)': typography.fontSize,
     },
+    marginBottom: spacing.xl,
   },
 
   heroActions: {
     display: 'flex',
+    flexWrap: 'wrap',
     gap: spacing.md,
     justifyContent: 'center',
-    flexWrap: 'wrap',
     marginBottom: spacing.lg,
   },
 });

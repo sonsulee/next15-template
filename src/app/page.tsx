@@ -1,6 +1,8 @@
 import * as stylex from '@stylexjs/stylex';
-import { styles } from './page.styles';
+
 import { Button } from '../components';
+
+import { styles } from './page.styles';
 
 export default function Home() {
   return (

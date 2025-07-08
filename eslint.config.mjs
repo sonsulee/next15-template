@@ -108,8 +108,8 @@ const customRulesConfig = {
     // stylex
     '@stylexjs/valid-styles': 'error',
     '@stylexjs/no-unused': 'error',
-    '@stylexjs/valid-shorthands': 'warning',
-    '@stylexjs/sort-keys': 'warning',
+    '@stylexjs/valid-shorthands': 'warn',
+    '@stylexjs/sort-keys': 'warn',
 
     // Prettier
     'prettier/prettier': ['error', {}, { usePrettierrc: true }],
