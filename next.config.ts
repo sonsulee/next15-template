@@ -29,4 +29,4 @@ export default stylexPlugin({
     });
     return result.css;
   },
-})({ transpilePackages: ['@stylexjs/open-props'] });
+})({ transpilePackages: ['@stylextras/open-props'] });

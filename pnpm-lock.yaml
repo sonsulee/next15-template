@@ -11,6 +11,9 @@ importers:
       '@stylexjs/stylex':
         specifier: ^0.14.1
         version: 0.14.1
+      '@stylextras/open-props':
+        specifier: ^0.11.0
+        version: 0.11.0
       next:
         specifier: 15.3.5
         version: 15.3.5(@babel/core@7.28.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -528,6 +531,9 @@ packages:
 
   '@stylexswc/webpack-plugin@0.9.0':
     resolution: {integrity: sha512-gew5XapJdxy5BcE5sGaVb4BF5RGMi0mfYnr052xa6mFCzOjDEnixu8Sdgm4Wd5WX31biICTaNgaG4qMKq4V5WQ==}
+
+  '@stylextras/open-props@0.11.0':
+    resolution: {integrity: sha512-+eClMm1VJ6CFxcY76LPG/nv2vYKUGZ6GD6l3+1FrSukMUe/1xEs6GT72KVPT0a9wOzOc4pzMPriyt+TkMO3/jA==}
 
   '@swc/counter@0.1.3':
     resolution: {integrity: sha512-e2BR4lsJkkRlKZ/qCHPw9ZaSxc0MVUd7gtbtaB7aMvHeJVYe8sOB8DBZkP2DtISHGSku9sCK6T6cnY0CtXrOCQ==}
@@ -2411,6 +2417,10 @@ snapshots:
       loader-utils: 3.3.1
     transitivePeerDependencies:
       - supports-color
+
+  '@stylextras/open-props@0.11.0':
+    dependencies:
+      '@stylexjs/stylex': 0.14.1
 
   '@swc/counter@0.1.3': {}
 
