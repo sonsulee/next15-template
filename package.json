@@ -15,7 +15,9 @@
     "test:coverage": "vitest --coverage",
     "test:run": "vitest run",
     "test:update": "vitest -u",
-    "test:debug": "vitest --inspect-brk --single-thread"
+    "test:debug": "vitest --inspect-brk --single-thread",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "next": "15.5.3",
@@ -25,7 +27,11 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.0",
+    "@chromatic-com/storybook": "^4.1.1",
     "@playwright/test": "^1.55.0",
+    "@storybook/addon-a11y": "^9.1.6",
+    "@storybook/addon-docs": "^9.1.6",
+    "@storybook/addon-vitest": "^9.1.6",
     "@tailwindcss/postcss": "^4",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/react": "^16.3.0",
@@ -34,9 +40,14 @@
     "@types/react-dom": "^19",
     "@vitejs/plugin-react": "^5.0.3",
     "jsdom": "^27.0.0",
+    "storybook": "^9.1.6",
     "tailwindcss": "^4",
     "typescript": "^5",
     "vite-tsconfig-paths": "^5.1.4",
-    "vitest": "^3.2.4"
+    "vitest": "^3.2.4",
+    "@storybook/nextjs-vite": "^9.1.6",
+    "@vitest/browser": "3.2.4",
+    "playwright": "^1.55.0",
+    "@vitest/coverage-v8": "3.2.4"
   }
 }
