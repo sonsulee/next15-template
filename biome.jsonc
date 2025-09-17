@@ -1,0 +1,108 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.2.0/schema.json",
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
+  "files": {
+    "includes": [
+      // Include all source files
+      "src/**/*.{ts,tsx,js,jsx}",
+      "app/**/*.{ts,tsx,js,jsx}",
+      "__tests__/**/*.{ts,tsx}",
+
+      // Global excludes (applies to all tools)
+      "!**/node_modules",
+      "!**/.next",
+      "!**/.vercel",
+      "!**/dist",
+      "!**/build",
+      "!**/*.min.js",
+      "!**/coverage",
+      "!**/storybook-static"
+    ],
+    "ignoreUnknown": true
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 100,
+    "includes": [
+      // Apply formatter to all files (including tests, storybook)
+      "**/*.{ts,tsx,js,jsx,json,jsonc}",
+
+      // Formatter exclusions
+      "!**/*.min.js",
+      "!**/generated/**",
+      "!**/storybook-static/**"
+    ]
+  },
+  "javascript": {
+    "formatter": {
+      "semicolons": "always",
+      "trailingCommas": "all",
+      "quoteStyle": "single",
+      "bracketSpacing": true
+    }
+  },
+  "linter": {
+    "enabled": true,
+    "includes": [
+      // Apply linter strictly to production code only
+      "src/**/*.{ts,tsx,js,jsx}",
+      "app/**/*.{ts,tsx,js,jsx}",
+
+      // Exclude tests and storybook from linter
+      "!__tests__/**",
+      "!**/*.spec.{ts,tsx}",
+      "!**/*.test.{ts,tsx}",
+      "!**/*.stories.{ts,tsx,js,jsx}",
+      "!**/*.story.{ts,tsx,js,jsx}",
+      "!**/.storybook/**",
+      "!**/stories/**"
+    ],
+    "rules": {
+      "recommended": true,
+      "suspicious": {
+        "noUnknownAtRules": "off"
+      },
+      /**
+       Nursery rules are experimental and may change or be removed in future releases.
+       useSortedClasses is an experimental rule that automatically sorts class names in your code.
+       @see https://biomejs.dev/linter/rules/use-sorted-classes/
+       @see https://github.com/biomejs/biome/issues/1274
+      */
+      "nursery": {
+        "useSortedClasses": {
+          "level": "error",
+          "fix": "safe",
+          "options": {
+            "attributes": ["classList", "className"],
+            "functions": ["clsx", "cva", "tw", "tw.*"]
+          }
+        }
+      }
+    },
+    "domains": {
+      "next": "recommended",
+      "react": "recommended",
+      "test": "recommended"
+    }
+  },
+
+  "json": {
+    "formatter": {
+      "enabled": true,
+      "trailingCommas": "none"
+    }
+  },
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
+  }
+}
