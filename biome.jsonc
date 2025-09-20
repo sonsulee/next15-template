@@ -68,6 +68,35 @@
       "suspicious": {
         "noUnknownAtRules": "off"
       },
+      "style": {
+        "noEnum": "error",
+        "useNamingConvention": {
+          "level": "error",
+          "options": {
+            "strictCase": false,
+            "conventions": [
+              {
+                "selector": {
+                  "kind": "interface"
+                },
+                "formats": ["PascalCase"]
+              },
+              {
+                "selector": {
+                  "kind": "typeAlias"
+                },
+                "formats": ["PascalCase"]
+              },
+              {
+                "selector": {
+                  "kind": "const"
+                },
+                "formats": ["camelCase", "PascalCase", "CONSTANT_CASE"]
+              }
+            ]
+          }
+        }
+      },
       /**
        Nursery rules are experimental and may change or be removed in future releases.
        useSortedClasses is an experimental rule that automatically sorts class names in your code.
@@ -82,7 +111,9 @@
             "attributes": ["classList", "className"],
             "functions": ["clsx", "cva", "tw", "tw.*"]
           }
-        }
+        },
+        "noMisusedPromises": "error",
+        "noFloatingPromises": "error"
       }
     },
     "domains": {
